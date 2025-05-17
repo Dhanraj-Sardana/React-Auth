@@ -1,8 +1,10 @@
 
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form"
+import { useState } from "react";
 
 export default function Signin() {
+    const [flag,setFlag]=useState(false);
     const navigate=useNavigate();
      const { register, handleSubmit,formState:{errors} } = useForm()
     const handleSub= async (data)=>{
@@ -23,8 +25,14 @@ export default function Signin() {
        
         
         
-      if(response.status==200){
+      if(response.status===200){
         navigate('/home',{replace:true})
+        setFlag(false)
+      }
+      if(response.status===409){
+        setFlag(true)
+        
+        
       }
     } catch (err) {
       console.error("Error while sending data to server", err.message);
@@ -32,8 +40,9 @@ export default function Signin() {
 
     }
     return (
-        <div className='bg-zinc-600 min-h-screen '>
-            <form onSubmit={handleSubmit(handleSub)}  method="post" className='flex flex-col items-center gap-6 min-h-screen  justify-center' >
+        <div className="bg-zinc-600 w-screen h-screen flex justify-center items-center overflow-hidden">
+
+            <form onSubmit={handleSubmit(handleSub)}  method="post" className='flex flex-col items-center gap-6   justify-center' >
                 <div className='flex gap-4'>
                     <label htmlFor="name" className="font-extrabold text-xl">Enter your name :</label>
                     <input type="text" className=" border-b font-bold border-blue-200 focus: outline-none" name='name' {...register('name',{required:"Name is Required"})} placeholder='Userame' />
@@ -46,13 +55,15 @@ export default function Signin() {
                 {!errors?.name&&errors?.password&&<span className="text-red-500 m-[-6px] ml-9">{errors.password.message}</span>}
                 <div className='flex gap-4 ' >
                     <label htmlFor="email" className="font-extrabold text-xl">Enter your email :</label>
-                    <input type="email" name="email" {...register('email',{required:'email is required'})}  className="border-b font-bold border-blue-200 focus: outline-none " placeholder='Email' />
+                    <input type="email" name="email" onChange={()=>setFlag(false)} {...register('email',{required:'email is required'})}  className="border-b font-bold border-blue-200 focus: outline-none " placeholder='Email' />
                 </div>
                 {!errors?.name&& !errors?.password&& errors?.email&&<span className="text-red-500 m-[-6px] ml-9" >{errors.email.message}</span>}
                 <div>
            <input  className=" font-extrabold border border-solid-blue-400 p-3 bg-zinc-400 hover:text-white hover:bg-zinc-600" type="submit" value="Sign-in" />
                 </div>
+                {flag?<div className="text-red-500 font-semibold mt-2">User alredy exist with this email! please Login</div>:""}
             </form>
+            
         </div>
     )
 }
