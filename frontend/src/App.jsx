@@ -3,6 +3,7 @@ import './App.css'
 import Home from './components/Home'
 import Signin from './components/Signin'
 import {Routes,Route} from 'react-router-dom'
+import Login from './components/Login'
 function App() {
 const [name, setName] = useState("");
     const [password, setPassword] = useState('');
@@ -11,7 +12,8 @@ const [name, setName] = useState("");
   return (
    <Routes>
     <Route path="/home" element={<Home/>} />
-    <Route index element={<Signin name={name} setName={setName} password={password} setPassword={setPassword} email={email} setEmail={setEmail}/>}/>
+    <Route index element={<Signin />}/>
+    <Route path='/login' element={<Login/>}></Route>
 </Routes>
    
   )
