@@ -11,14 +11,13 @@ export default function Signin() {
     navigate('/login');
   }
      const handleSub= async (data)=>{
-        console.log(data);
-        
         try {
         const response=await fetch('http://localhost:3000/signin',{
             method:'POST',
             headers:{
                 'content-type':'application/json'
             },
+            credentials:'include',
             body:JSON.stringify(data)
 
 
