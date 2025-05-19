@@ -14,12 +14,18 @@ exports.signin = async (req, res) => {
                 if (error) res.status(500).send(error);
                 const user = new User({ name, email, password: hash });
                 await user.save();
+
                 //creating jwt
+                const token = jwt.sign({ email: email,userName:name }, process.env.SECURE, { expiresIn: '1h' });
                 
-                
-                const token = jwt.sign({ email: email }, process.env.SECURE, { expiresIn: '1h' });
                 //add this token to client browser
-                res.cookie('token',token);
+                res.cookie('token',token,{
+                    httpOnly:true,
+                    secure:false,
+                    
+                });
+                
+                
                 res.status(200).json({ message: "user signed in" })
             })
 
